@@ -25,6 +25,30 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+
+@app.route('/members', methods=['GET'])
+def get_all_members():
+    members = jackson_family.get_all_members()
+    return jsonify(members), 200
+
+@app.route('/member/<int:id>', methods=['GET'])
+def get_member(id):
+    member = jackson_family.get_member(id)
+    return jsonify(member), 200
+
+@app.route('/member', methods=['POST'])
+def add_member():
+    body = request.json
+    response = jackson_family.add_member(body)    
+    return jsonify(response), 200    
+
+@app.route('/member/<int:id>', methods=['DELETE'])
+def delete_response(id):
+    member_delete = jackson_family.delete_member(id)
+    if member_delete is True:
+        return jsonify({'done':member_delete}), 200
+    return jsonify({"message" : "Not Found" }), 404
+
 @app.route('/members', methods=['GET'])
 def handle_hello():
 
